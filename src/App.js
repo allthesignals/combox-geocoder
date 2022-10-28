@@ -6,6 +6,7 @@ const { comboBox }  = USWDS;
 function App() {
   const ref = document.body;
   const [suggestions, setSuggestions] = useState([]);
+  const [selectedSuggestion, setSelectedSuggestion] = useState();
   const [selectedCandidate, setSelectedCandidate] = useState();
 
   useEffect(() => {
@@ -35,21 +36,32 @@ function App() {
 
   return (
     <div className="App">
-      <label className="usa-label" for="fruit">ComboBox: Type an address</label>
+      <label className="usa-label" htmlFor="fruit">ComboBox: Type an address</label>
       <div
         className="usa-combo-box"
         data-filter="[\s\S]*"
+        data-placeholder="Search for an address"
         onInput={(ev) => {
           handleAddressSuggestions(ev.target.value);
         }}
-        onChange={(evn) => {
-          handleSelectedAddress(evn.target.value);
+        onChange={(ev) => {
+          console.log('did select');
+          setSelectedSuggestion(ev.target.value);
         }}
       >
         <select className="usa-select" name="fruit" id="fruit">
-          {suggestions.map(suggestion => <option value={suggestion.magicKey}>{suggestion.text}</option>)}
+          <option value></option>
+          {suggestions.map((suggestion, idx) => <option key={idx} value={suggestion.magicKey}>{suggestion.text}</option>)}
         </select>
       </div>
+      <button
+        type=""
+        disabled={!selectedSuggestion}
+        className="usa-button usa-button--big"
+        onClick={() => {
+          handleSelectedAddress(selectedSuggestion);
+        }}
+      >Search</button>
       {selectedCandidate && <>
         <h3>Post Offices near {selectedCandidate.address}:</h3>
         <ul>
